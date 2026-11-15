@@ -42,6 +42,11 @@ public class Guest {
         this.documentNumber = documentNumber;
     }
 
+    @PrePersist
+    void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
     public Long getId() {
         return id;
     }
