@@ -8,6 +8,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     boolean existsByRoomNumber(String roomNumber);
 
+    boolean existsByRoomNumberAndIdNot(String roomNumber, Long id);
+
     List<Room> findByType(RoomType type);
 
     List<Room> findByAvailable(boolean available);
