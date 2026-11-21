@@ -37,4 +37,22 @@ public class RoomController {
                 .created(URI.create("/api/rooms/" + createdRoom.id()))
                 .body(createdRoom);
     }
+
+    @PutMapping("/{id}")
+    public RoomResponse updateRoom(@PathVariable("id") Long id,
+                                   @Valid @RequestBody RoomRequest request) {
+        return roomService.updateRoom(id, request);
+    }
+
+    @PatchMapping("/{id}/availability")
+    public RoomResponse changeAvailability(@PathVariable("id") Long id,
+                                           @RequestParam("available") boolean available) {
+        return roomService.changeAvailability(id, available);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRoom(@PathVariable("id") Long id) {
+        roomService.deleteRoom(id);
+    }
 }
