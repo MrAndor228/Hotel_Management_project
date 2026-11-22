@@ -36,4 +36,17 @@ public class GuestController {
                 .created(URI.create("/api/guests/" + createdGuest.id()))
                 .body(createdGuest);
     }
+
+    @PutMapping("/{id}")
+    public GuestResponse updateGuest(@PathVariable("id") Long id,
+                                     @Valid @RequestBody GuestRequest request) {
+        return guestService.updateGuest(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteGuest(@PathVariable("id") Long id) {
+        guestService.deleteGuest(id);
+    }
+
 }
