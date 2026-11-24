@@ -61,4 +61,32 @@ class RoomServiceImplTest {
         assertThrows(BusinessRuleViolationException.class, () -> roomService.createRoom(request));
         verify(roomRepository, never()).save(any());
     }
+    @Test
+    void getRoomById_shouldThrow_whenRoomDoesNotExist() {
+        when(roomRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> roomService.getRoomById(99L));
+    }
+
+    @Test
+    void getRooms_shouldFilterByType_whenOnlyTypeIsGiven() {
+        Room suite = new Room("301", RoomType.SUITE, 4, new BigDecimal("600.00"));
+        when(roomRepository.findByType(RoomType.SUITE)).thenReturn(List.of(suite));
+
+        List<RoomResponse> result = roomService.getRooms(RoomType.SUITE, null);
+
+        assertEquals(1, result.size());
+        assertEquals("301", result.get(0).roomNumber());
+        verify(roomRepository, never()).findAll();
+    }
+
+    @Test
+    void deleteRoom_shouldDeleteRoom_whenRoomExists() {
+        Room room = new Room("101", RoomType.DOUBLE, 2, new BigDecimal("250.00"));
+        when(roomRepository.findById(1L)).thenReturn(Optional.of(room));
+
+        roomService.deleteRoom(1L);
+
+        verify(roomRepository).delete(room);
+    }
 }
